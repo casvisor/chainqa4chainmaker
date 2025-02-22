@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  chainqa_offchain_demo:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    # restart: always
+    command: /chainqa_offchain_demo conf/config.ini
+
+  chainqa_tencent_chainmaker:
+    build: 
+      context: ./tencent-chainmaker
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001"
+    # restart: always
+    command: /chainqa_tencent_chainmaker conf/config.ini

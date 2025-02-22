@@ -23,3 +23,19 @@ go.work.sum
 
 # env file
 .env
+
+*.DS_Store
+chainqa_offchain_demo
+# back
+back/vendor
+
+# tencent cloud
+tencent-chainmaker/vendor
+tencent-chainmaker/conf/config.ini
+
+# front
+front/node_modules
+front/dist
+
+.idea/
+*.iml
