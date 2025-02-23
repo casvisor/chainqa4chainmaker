@@ -20,13 +20,15 @@
       </t-form-item>
     </t-form>
     <DownloadIPFSModal ref="downloadModalRef" />
+    <UserIdCheckAndSetDialog ref="UserIdCheckAndSetDialogRef" />
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import DownloadIPFSModal from "../upload/components/DownloadIPFSModal.vue";
 import { MessagePlugin } from "tdesign-vue-next";
+import UserIdCheckAndSetDialog from "@/components/UserIdCheckAndSetDialog.vue";
 
 const form = reactive({
   ipfsPos: "",
@@ -53,6 +55,11 @@ const handleSubmit = ({ validateResult, firstError, e }) => {
     MessagePlugin.error("请检查输入项");
   }
 };
+
+const UserIdCheckAndSetDialogRef = ref(null);
+onMounted(() => {
+  UserIdCheckAndSetDialogRef.value.checkAndShowUserIdSetDialog(false, false);
+});
 </script>
 
 <style scoped>
