@@ -1,15 +1,15 @@
 <template>
   <div class="home">
-    <t-typography-title level="h5">
+    <!-- <t-typography-title level="h5">
       <span style="color: #0052d9">#1 设置用户ID</span>
     </t-typography-title>
     <div class="input-container input-user-id">
       <t-input v-model="uId" placeholder="请输入用户Id" />
       <t-button @click="saveUserId">设置ID</t-button>
-    </div>
+    </div> -->
 
     <t-typography-title level="h5" style="color: #0052d9">
-      <span style="color: #0052d9">#2 选择操作</span>
+      <span style="color: #0052d9">请选择操作</span>
     </t-typography-title>
     <div class="choose">
       <t-card
@@ -47,16 +47,18 @@
         <template #title>审计日志</template>
       </t-card>
     </div>
-    <t-guide v-model="currentGuide" :steps="GuideSteps" :show-overlay="false" />
+    <!-- <t-guide v-model="currentGuide" :steps="GuideSteps" :show-overlay="false" /> -->
+    <UserIdCheckAndSetDialog ref="UserIdCheckAndSetDialogRef" />
   </div>
 </template>
 
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useUserStore } from "../stores/user";
 import router from "../router";
 import { MessagePlugin } from "tdesign-vue-next";
+import UserIdCheckAndSetDialog from "../components/UserIdCheckAndSetDialog.vue";
 
 const userStore = useUserStore();
 const uId = ref("");
@@ -69,22 +71,27 @@ const routeTo = (name_) => {
   // 判断是否设置了用户ID
   if (name_ != "download" && name_ != "log" && !userStore.userId) {
     MessagePlugin.error("此操作需先设置用户ID");
-    currentGuide.value = 0;
+    // currentGuide.value = 0;
     return;
   }
   router.push({ name: name_ });
 };
 
-// guide
-const currentGuide = ref(-1);
-const GuideSteps = [
-  {
-    element: ".input-user-id",
-    title: "设置用户ID",
-    body: "查询操作和上传操作均需先设置用户ID",
-    placement: "bottom-right",
-  },
-];
+// // guide
+// const currentGuide = ref(-1);
+// const GuideSteps = [
+//   {
+//     element: ".input-user-id",
+//     title: "设置用户ID",
+//     body: "查询操作和上传操作均需先设置用户ID",
+//     placement: "bottom-right",
+//   },
+// ];
+
+const UserIdCheckAndSetDialogRef = ref(null);
+onMounted(() => {
+  UserIdCheckAndSetDialogRef.value.checkAndShowUserIdSetDialog();
+});
 </script>
 
 <style scoped>

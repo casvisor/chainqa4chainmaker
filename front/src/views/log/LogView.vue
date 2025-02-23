@@ -9,7 +9,7 @@
         variant="outline"
         :readonly="logSearchLoading"
       >
-        <t-radio-button value="userId">按用户ID查询</t-radio-button>
+        <t-radio-button value="userId">按用户账号查询</t-radio-button>
         <t-radio-button value="timeRange">按时间范围查询</t-radio-button>
       </t-radio-group>
     </div>
@@ -17,12 +17,12 @@
       <t-form :data="form" ref="formRef" label-width="100px" :rules="rules">
         <t-form-item
           v-if="queryMethod === 'userId'"
-          label="用户ID"
+          label="用户账号"
           name="userId"
         >
           <t-input
             v-model="form.userId"
-            placeholder="请输入用户ID"
+            placeholder="请输入用户账号"
             :readonly="logSearchLoading"
           />
         </t-form-item>
@@ -98,16 +98,18 @@
         ref="QueryItemAndResultDrawerRef"
       ></query-item-and-result-drawer>
     </t-loading>
+    <UserIdCheckAndSetDialog ref="UserIdCheckAndSetDialogRef" />
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { MessagePlugin } from "tdesign-vue-next";
 import dayjs from "dayjs";
 import { logByTimeRange, logByUid } from "@/api/log";
 import * as XLSX from "xlsx";
 import QueryItemAndResultDrawer from "./components/QueryItemAndResultDrawer.vue";
+import UserIdCheckAndSetDialog from "@/components/UserIdCheckAndSetDialog.vue";
 
 const queryMethod = ref("userId"); // 用于切换查询方式
 const form = reactive({
@@ -122,7 +124,7 @@ const presets = ref({
 });
 
 const rules = {
-  userId: [{ required: true, message: "请输入用户ID", trigger: "blur" }],
+  userId: [{ required: true, message: "请输入用户账号", trigger: "blur" }],
   timeRange: [{ required: true, message: "请选择时间范围", trigger: "change" }],
 };
 
@@ -146,7 +148,7 @@ const handleSubmit = async () => {
 };
 
 const searchByUserId = async () => {
-  // 根据用户ID查询
+  // 根据用户账号查询
   var uId = form.userId;
   var result = await logByUid(uId).catch((err) => {
     MessagePlugin.error("查询失败");
@@ -197,7 +199,7 @@ const resultCounts = ref(0);
 const columns = [
   { colKey: "serial-number", title: "序号", width: 80 },
   { colKey: "QueryId", title: "查询ID" },
-  { colKey: "Uid", title: "用户ID" },
+  { colKey: "Uid", title: "用户账号" },
   { colKey: "Timestamp", title: "查询时间", cell: "Timestamp", width: 150 },
   // { colKey: "QueryItem", title: "查询项", width: 300 },
   { colKey: "QueryStatus", title: "查询状态", cell: "QueryStatus" },
@@ -219,7 +221,7 @@ const downloadLog = () => {
   // 在第一行插入表头
   tableDataCopy.unshift({
     QueryId: "查询ID",
-    Uid: "用户ID",
+    Uid: "用户账号",
     Timestamp: "查询时间",
     QueryItem: "查询项",
     QueryStatus: "查询状态",
@@ -253,6 +255,11 @@ const ShowQueryItemAndResultDrawer = (queryResult, queryItem, queryId) => {
     queryId
   );
 };
+
+const UserIdCheckAndSetDialogRef = ref(null);
+onMounted(() => {
+  UserIdCheckAndSetDialogRef.value.checkAndShowUserIdSetDialog(false, false);
+});
 </script>
 
 <style scoped>

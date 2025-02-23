@@ -32,21 +32,26 @@
         V0.0.6
       </t-tag> -->
     </t-typography-title>
-    <div
-      style="
-        border-radius: 20px;
-        background-color: #e7f5ff;
-        padding: 5px;
-        width: 200px;
-        margin: 0 auto;
-        font-size: 14px;
-      "
-    >
-      <div v-if="userId">用户ID: {{ userId }}</div>
-      <div v-else>未设置用户ID</div>
-    </div>
+    <t-tooltip content="点击修改用户信息" placement="bottom">
+      <div
+        style="
+          border-radius: 20px;
+          background-color: #e7f5ff;
+          padding: 5px;
+          width: 200px;
+          margin: 0 auto;
+          font-size: 14px;
+          cursor: pointer;
+        "
+        @click="checkAndSetUserId"
+      >
+        <div v-if="userId">用户: {{ userId }}</div>
+        <div v-else>未设置用户账号</div>
+      </div>
+    </t-tooltip>
     <t-divider></t-divider>
     <ApiConfigDialog ref="ApiConfigDialogRef" />
+    <UserIdCheckAndSetDialog ref="UserIdCheckAndSetDialogRef" />
   </div>
 </template>
 
@@ -56,6 +61,7 @@ import { useUserStore } from "../stores/user";
 import router from "../router";
 import { Setting1Icon, HomeIcon, HelpCircleIcon } from "tdesign-icons-vue-next";
 import ApiConfigDialog from "./ApiConfigDialog.vue";
+import UserIdCheckAndSetDialog from "./UserIdCheckAndSetDialog.vue";
 
 const userStore = useUserStore();
 const userId = computed(() => userStore.userId);
@@ -72,6 +78,11 @@ const showApiConfigDialog = () => {
 
 const showHelpDoc = () => {
   window.open("https://www.yuque.com/jjq0425/ei0f4f/acgk6l3ax4gf98wh");
+};
+
+const UserIdCheckAndSetDialogRef = ref(null);
+const checkAndSetUserId = () => {
+  UserIdCheckAndSetDialogRef.value.checkAndShowUserIdSetDialog(true);
 };
 </script>
 

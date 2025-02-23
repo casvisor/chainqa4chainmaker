@@ -20,7 +20,7 @@
       <t-input v-model="contractName" label="合约名称：" />
     </div>
     <div class="config-item" style="font-size: 12px; color: #999">
-      版本号：V0.0.8
+      版本号：V0.0.8.2
     </div>
     <t-alert theme="warning">
       <template #message>请勿随意更改！</template>
